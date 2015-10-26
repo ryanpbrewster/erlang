@@ -26,19 +26,8 @@ smartSolve(Hi) ->
   C15 = 15*(N15*(N15+1) div 2), % = 15 + 30 + ... + 990
   C3 + C5 - C15.
 
-bruteForce(Hi, Ns) -> bruteForceHelper(1, Hi, Ns).
-
-bruteForceHelper(Lo, Hi, _) when Lo > Hi -> 0;
-bruteForceHelper(X, Hi, Ns) ->
-  case divisibleBy(X, Ns) of
-    true -> X + bruteForceHelper(X+1, Hi, Ns);
-    false -> bruteForceHelper(X+1, Hi, Ns)
-  end.
-
-divisibleBy(_, []) -> false;
-divisibleBy(X, [N|_]) when (X rem N) == 0 -> true;
-divisibleBy(X, [_|Ns]) -> divisibleBy(X, Ns).
-
+bruteForce(Hi, Ns) -> lists:sum([ X || X <- lists:seq(1, Hi), isDivisibleByAny(X, Ns)]).
+isDivisibleByAny(X, Ns) -> lists:any( fun(N) -> (X rem N) =:= 0 end, Ns ).
 
 bruteForce_test() ->
   [
